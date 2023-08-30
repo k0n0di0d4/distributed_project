@@ -1,0 +1,21 @@
+<form class="form" [formGroup]="registerForm" action="#" method="post" (ngSubmit)="submitRegister()" autocomplete="on">
+    <div class="form__container">
+        <div class="input__container">
+            <img src="/assets/images/id-card.png" alt="">
+            <input class="input" type="text" placeholder="Username" formControlName="username">
+        </div>
+        <div class="input__error">
+            <span *ngIf="username?.invalid && (username?.dirty || username?.touched)">Invalid username</span>
+        </div>
+        <div class="input__container">
+            <img src="/assets/images/padlock.png" alt="">
+            <input class="input" type="password" placeholder="Password" formControlName="password">
+        </div>
+        <div class="input__error">
+            <span *ngIf="password?.invalid && (password?.dirty || password?.touched)">Invalid password</span>
+        </div>
+        <div class="loginButton__container">
+            <button class="loginButton" type="submit" [disabled]="!registerForm.valid">Sign Up</button>
+        </div>
+    </div>
+</form>

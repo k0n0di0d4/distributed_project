@@ -1,5 +1,3 @@
-ARG IMAGE_TAG=frontend_app
-
 FROM node:14 as build
 
 WORKDIR /app

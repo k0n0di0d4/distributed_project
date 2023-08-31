@@ -41,9 +41,9 @@ services:
     networks:
       - internal_net
 
-  fronted:
-    build: fronted
-    container_name: fronted
+  frontend:
+    build: frontend
+    container_name: frontend
     restart: always
     ports:
       - "8083:8083"

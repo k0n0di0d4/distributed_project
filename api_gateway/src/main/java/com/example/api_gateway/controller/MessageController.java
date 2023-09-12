@@ -10,9 +10,11 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 //@RequestMapping("/message")
 public class MessageController {
+
     @Value("${rabbitmq.messageExchange.name}")
     private String exchange;
 

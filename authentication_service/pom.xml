@@ -33,12 +33,12 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-loadbalancer -->
+		<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-loadbalancer
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-loadbalancer</artifactId>
 			<version>4.0.4</version>
-		</dependency>
+		</dependency>-->
 
 		<!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
 		<dependency>

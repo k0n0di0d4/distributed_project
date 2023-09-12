@@ -1,11 +1,7 @@
 package com.example.api_gateway.config;
 
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
@@ -25,23 +21,22 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         logger.info("MESSAGE BROKER IN SOCKETS");
         logger.info(config.toString());
 
-        config.setApplicationDestinationPrefixes("/app");
-        // carry messages to the clients prefixed with /destination
+        // carry messages to the clients prefixed with /all
         // this will be used to subscribe to
-        config.enableSimpleBroker("/all", "/specific");
-
-
+        config.enableSimpleBroker("/all");
 
         // designate the /app prefix for methods annotated with @MessageMapping
+        config.setApplicationDestinationPrefixes("/app");
 
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/websocket").setAllowedOriginPatterns("*").withSockJS();
+        registry.addEndpoint("/websocket");
+        registry.addEndpoint("/websocket").withSockJS();
     }
 
-    @Bean
+    /*@Bean
     WebMvcConfigurer corsConfig() {
         return new WebMvcConfigurer() {
 
@@ -49,10 +44,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
-                        .allowedHeaders("*").allowedOrigins("http://localhost:5000");
+                        .allowedHeaders("*");
             }
         };
-    }
+    }*/
 
 
 }

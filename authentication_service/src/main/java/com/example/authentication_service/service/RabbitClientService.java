@@ -1,8 +1,6 @@
 package com.example.authentication_service.service;
 
-import com.example.authentication_service.domain.User;
 import com.example.authentication_service.entity.AuthEntity;
-import com.example.authentication_service.repository.UserRepository;
 import com.example.authentication_service.request.AuthenticationRequest;
 import com.example.authentication_service.request.RegisterRequest;
 import com.example.authentication_service.response.AuthenticationResponse;
@@ -14,18 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ClientService {
+public class RabbitClientService {
 
     private RabbitTemplate rabbitTemplate;
-    private final UserRepository userRepository;
 
     private AuthenticationService authenticationService;
 
-    private static final Logger logger = LoggerFactory.getLogger(ClientService.class);
+    private static final Logger logger = LoggerFactory.getLogger(RabbitClientService.class);
 
     @Autowired
-    ClientService(UserRepository userRepository, RabbitTemplate rabbitTemplate, AuthenticationService authenticationService) {
-        this.userRepository = userRepository;
+    RabbitClientService(RabbitTemplate rabbitTemplate, AuthenticationService authenticationService) {
         this.rabbitTemplate = rabbitTemplate;
         this.authenticationService = authenticationService;
     }

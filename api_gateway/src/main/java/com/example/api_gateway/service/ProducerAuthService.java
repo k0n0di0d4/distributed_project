@@ -16,10 +16,10 @@ public class ProducerAuthService {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    @Value("${spring.rabbitmq.exchange}")
+    @Value("${rabbitmq.authExchange.name}")
     private String exchange;
 
-    @Value("${spring.rabbitmq.routingkey}")
+    @Value("${rabbitmq.authRoutingKey.name}")
     private String routingkey;
 
     public void sendAuthEntity(AuthEntity authEntity) {

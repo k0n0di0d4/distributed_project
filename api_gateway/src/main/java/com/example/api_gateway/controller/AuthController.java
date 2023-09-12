@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Value("${spring.rabbitmq.exchange}")
+    @Value("${rabbitmq.authExchange.name}")
     private String exchange;
 
-    @Value("${spring.rabbitmq.routingkey}")
+    @Value("${rabbitmq.authRoutingKey.name}")
     private String routingkey;
     private ProducerAuthService authService;
     RabbitTemplate rabbitTemplate;

@@ -37,7 +37,7 @@ public class UserService {
     }
 
     public void removePerson(User user) {
-        entityManager.remove(user);
+        userRepository.delete(user);
     }
 
     public Optional<List<User>> getAllPersons() {

@@ -1,4 +1,4 @@
-package com.example.authentication_service.config;
+package com.example.message_service.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +24,7 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**", "api/user/**", "api/message/**")
+                .requestMatchers("/api/auth/**", "api/user/**", "api/message/**", "message/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

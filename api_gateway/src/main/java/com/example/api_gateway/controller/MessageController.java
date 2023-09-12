@@ -6,10 +6,12 @@ import com.example.api_gateway.service.ProducerMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/message")
+//@RequestMapping("/message")
 public class MessageController {
     @Value("${rabbitmq.messageExchange.name}")
     private String exchange;
@@ -25,7 +27,8 @@ public class MessageController {
     }
 
     //TODO: FIX REQUEST
-    @PostMapping("/send")
+    @MessageMapping("/send")
+    @SendTo("/all")
     public ResponseEntity<String> sendMessage(@RequestBody MessageRequest messageRequest) {
         MessageRequest message = new MessageRequest(messageRequest.getId(), messageRequest.getText(), messageRequest.getSender(),
                 messageRequest.getReceiver(), "CHAT");
@@ -34,7 +37,7 @@ public class MessageController {
     }
 
     //TODO: FIX REQUEST
-    @PostMapping("/delete")
+    @MessageMapping("/delete")
     public ResponseEntity<String> deleteMessage(@RequestBody MessageRequest messageRequest) {
         MessageRequest message = new MessageRequest(messageRequest.getId(), messageRequest.getText(), messageRequest.getSender(),
                 messageRequest.getReceiver(), "DELETE");

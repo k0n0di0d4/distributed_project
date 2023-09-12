@@ -11,7 +11,6 @@
     <modules>
         <module>api_gateway</module>
         <module>authentication_service</module>
-        <module>discovery_server</module>
         <module>message_service</module>
     </modules>
 

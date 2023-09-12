@@ -6,19 +6,24 @@ import com.example.message_service.request.MessageRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RabbitClientService {
 
+    private RabbitTemplate rabbitTemplate;
+
     private MessageService messageService;
 
     private static final Logger logger = LoggerFactory.getLogger(RabbitClientService.class);
 
     @Autowired
-    public RabbitClientService(MessageService messageService) {
+    RabbitClientService(MessageService messageService, RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
         this.messageService = messageService;
+
     }
 
     @RabbitListener(queues = "${spring.rabbitmq.queue}")
@@ -27,7 +32,7 @@ public class RabbitClientService {
         String option = messageRequest.getMessageType();
         logger.info(option);
 
-        /*switch(option){
+        switch(option){
             case "CHAT":
                 Message message = new Message();
                 message.setText(messageRequest.getText());
@@ -43,7 +48,7 @@ public class RabbitClientService {
                 message1.setReceiver(messageRequest.getReceiver());
                 messageService.deleteMessage(message1);
                 break;
-        }*/
+        }
         //return "nothing done";
         //return "ok";
     }

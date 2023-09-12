@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,10 +28,10 @@ public class MessageController {
     }
 
     @PostMapping("/send")
-    public ResponseEntity<String> sendMessage(MessageRequest messageRequest) {
-        /*MessageRequest message = new MessageRequest(messageRequestRequest.getText(), messageRequestRequest.getSender(),
-                messageRequestRequest.getReceiver(), messageRequestRequest.getMessageType());*/
-        messageService.sendMessage(messageRequest);
+    public ResponseEntity<String> sendMessage(@RequestBody MessageRequest messageRequest) {
+        MessageRequest message = new MessageRequest(messageRequest.getText(), messageRequest.getSender(),
+                messageRequest.getReceiver(), messageRequest.getMessageType());
+        messageService.sendMessage(message);
         return ResponseEntity.ok("Message sent");
     }
 

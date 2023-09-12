@@ -22,8 +22,8 @@ public class ProducerMessageService {
     @Value("${rabbitmq.messageRoutingKey.name}")
     private String routingkey;
 
-    public void sendMessage(MessageRequest message) {
-        rabbitTemplate.convertAndSend(exchange, routingkey, message);
+    public void sendMessage(MessageRequest messageRequest) {
+        rabbitTemplate.convertAndSend(exchange, routingkey, messageRequest);
 
     }
 }

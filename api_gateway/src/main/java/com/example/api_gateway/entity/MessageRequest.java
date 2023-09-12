@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @Component
 public class MessageRequest {
+    private int id;
     private String text;
     private String sender;
     private String receiver;

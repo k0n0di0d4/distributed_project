@@ -6,10 +6,7 @@ import com.example.api_gateway.service.ProducerMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/message")
@@ -27,12 +24,22 @@ public class MessageController {
         this.messageService = messageService;
     }
 
+    //TODO: FIX REQUEST
     @PostMapping("/send")
     public ResponseEntity<String> sendMessage(@RequestBody MessageRequest messageRequest) {
-        MessageRequest message = new MessageRequest(messageRequest.getText(), messageRequest.getSender(),
-                messageRequest.getReceiver(), messageRequest.getMessageType());
+        MessageRequest message = new MessageRequest(messageRequest.getId(), messageRequest.getText(), messageRequest.getSender(),
+                messageRequest.getReceiver(), "CHAT");
         messageService.sendMessage(message);
         return ResponseEntity.ok("Message sent");
+    }
+
+    //TODO: FIX REQUEST
+    @PostMapping("/delete")
+    public ResponseEntity<String> deleteMessage(@RequestBody MessageRequest messageRequest) {
+        MessageRequest message = new MessageRequest(messageRequest.getId(), messageRequest.getText(), messageRequest.getSender(),
+                messageRequest.getReceiver(), "DELETE");
+        messageService.sendMessage(message);
+        return ResponseEntity.ok("Message deleted");
     }
 
 }

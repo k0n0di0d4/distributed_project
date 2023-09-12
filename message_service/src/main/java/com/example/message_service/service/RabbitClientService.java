@@ -46,6 +46,7 @@ public class RabbitClientService {
                 message1.setText(messageRequest.getText());
                 message1.setSender(messageRequest.getSender());
                 message1.setReceiver(messageRequest.getReceiver());
+                logger.info("Message deleted " + message1);
                 messageService.deleteMessage(message1);
                 break;
         }

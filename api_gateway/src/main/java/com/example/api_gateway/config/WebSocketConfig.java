@@ -7,11 +7,11 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-//@Configuration
-//@EnableWebSocketMessageBroker
-public class WebSocketConfig {//implements WebSocketMessageBrokerConfigurer {
+@Configuration
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    //@Override
+    @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
 
         // carry messages to the clients prefixed with /destination
@@ -22,10 +22,10 @@ public class WebSocketConfig {//implements WebSocketMessageBrokerConfigurer {
         config.setApplicationDestinationPrefixes("/api");
     }
 
-    //@Override
+    @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // add an endpoint for websocket connections
-        registry.addEndpoint("/ChatApi").setAllowedOriginPatterns("*").withSockJS();
+        registry.addEndpoint("/ChatApi").setAllowedOrigins("*");
     }
 
 }

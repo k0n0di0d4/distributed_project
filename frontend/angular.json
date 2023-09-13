@@ -76,7 +76,7 @@
             },
             "development": {
               "browserTarget": "chat-app:build:development",
-              "port": 8083
+              "port": 19727
             }
           },
           "defaultConfiguration": "development"

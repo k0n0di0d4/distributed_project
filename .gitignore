@@ -4,3 +4,6 @@
 *.ipr
 .vscode/
 /message_service/target/
+/authentication_service/target/
+/image_service/target/
+/api_gateway/target/

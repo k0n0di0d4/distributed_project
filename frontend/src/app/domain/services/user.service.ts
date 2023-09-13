@@ -48,7 +48,7 @@ export class UserService {
   }
 
   public login(login: LoginModel) {
-    const endpoint = this.url + '/auth/authenticate';
+    const endpoint = this.url + '/auth/user/login';
     const headers = { 'accept': 'application/json', 'Content-Type': 'application/json' };
 
     return this.httpClient.post<TokenModel>(endpoint, login, { headers: headers })
@@ -63,7 +63,7 @@ export class UserService {
   }
 
   public signup(register: RegisterModel): void {
-    const endpoint = this.url + '/auth/register';
+    const endpoint = this.url + '/auth/user/register';
     const headers = { 'accept': 'application/json', 'Content-Type': 'application/json' };
 
     this.httpClient.post<TokenModel>(endpoint, register, { headers: headers })
@@ -71,9 +71,9 @@ export class UserService {
         catchError(this.globalErrorHandler.handleError)
       )
       .subscribe(token => {
-        this.setAuthenticationToken(token)
-        this.router.navigate(['/'])
-      }
+          this.setAuthenticationToken(token)
+          this.router.navigate(['/'])
+        }
       )
   }
 

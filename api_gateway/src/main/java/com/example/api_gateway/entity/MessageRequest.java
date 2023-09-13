@@ -13,6 +13,5 @@ public class MessageRequest {
     private int id;
     private String text;
     private String sender;
-    private String receiver;
     private String messageType;
 }

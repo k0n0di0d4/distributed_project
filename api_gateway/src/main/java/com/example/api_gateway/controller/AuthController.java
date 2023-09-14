@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "http://localhost:19727")
 public class AuthController {
 
     @Value("${rabbitmq.authExchange.name}")

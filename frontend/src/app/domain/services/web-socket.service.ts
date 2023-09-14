@@ -13,7 +13,13 @@ export class WebsocketService {
     this.socket$ = webSocket(WEBSOCKET_URL);
   }
 
-  // Methods to send and receive WebSocket messages
+  public connectToWebSocket() {
+    this.onMessage().subscribe((message) => {
+      console.log(message)
+    })
+  }
+
+  // Methods to send WebSocket messages
   send(message: any) {
     this.socket$.next(message);
   }

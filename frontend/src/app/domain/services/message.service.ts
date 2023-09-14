@@ -28,12 +28,6 @@ export class MessageService implements OnInit {
   ngOnInit(): void {
   }
 
-  public connectToWebSocket() {
-    this.websocketService.onMessage().subscribe((message) => {
-      console.log(message)
-    })
-  }
-
   public send(message: Message) {
     // const headers = { 'accept': 'text/plain', 'Authorization': `Bearer ${this.userService.getAccessToken()}` };
     // return this.httpClient.post<Message>(this.url + '/send', message, { headers: headers })

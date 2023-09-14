@@ -10,6 +10,8 @@ import { LoginModel } from '../models/login-model';
 import { CookieService } from 'ngx-cookie-service';
 import { TokenModel } from '../models/token-model';
 import { GlobalErrorHandlerService } from './global-error-handler.service';
+import { MessageService } from './message.service';
+import { WebsocketService } from './web-socket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +20,7 @@ export class UserService {
 
   private url: string = environment.baseUrl;
   private authenticationTokenCookieName: string = 'AuthenticationToken';
+  private usernameCookie: string = 'UsernameCookie';
 
   constructor(
     private httpClient: HttpClient,
@@ -31,20 +34,28 @@ export class UserService {
     this.cookieService.set(this.authenticationTokenCookieName, tokenModel.authToken);
   }
 
-  public getAccessToken(): string {
-    const accessToken = this.cookieService.get(this.authenticationTokenCookieName);
-    const isTokenExpired = (token: string) => Date.now() >= (JSON.parse(atob(token.split('.')[1]))).exp * 1000
-    const headers = { 'accept': 'application/json', 'Content-Type': 'application/json' };
-    const body = { accessToken: accessToken };
+  public setUsernameCookie(login: string) {
+    this.cookieService.set(this.usernameCookie, login);
+  }
 
-    if (isTokenExpired(accessToken)) {
-      this.httpClient.post<string>(this.url + '/RefreshToken', body, { headers: headers })
-        .pipe(
-          catchError(this.globalErrorHandler.handleError)
-        )
-        .subscribe(newAccessToken => this.cookieService.set(this.authenticationTokenCookieName, newAccessToken))//now return token object, return only string
-    }
+  public getAccessToken(): string {
+    // const accessToken = this.cookieService.get(this.authenticationTokenCookieName);
+    // const isTokenExpired = (token: string) => Date.now() >= (JSON.parse(atob(token.split('.')[1]))).exp * 1000
+    // const headers = { 'accept': 'application/json', 'Content-Type': 'application/json' };
+    // const body = { accessToken: accessToken };
+
+    // if (isTokenExpired(accessToken)) {
+    //   this.httpClient.post<string>(this.url + '/RefreshToken', body, { headers: headers })
+    //     .pipe(
+    //       catchError(this.globalErrorHandler.handleError)
+    //     )
+    //     .subscribe(newAccessToken => this.cookieService.set(this.authenticationTokenCookieName, newAccessToken))//now return token object, return only string
+    // }
     return this.cookieService.get(this.authenticationTokenCookieName);
+  }
+
+  public getUsernameCookie(): string {
+    return this.cookieService.get(this.usernameCookie);
   }
 
   public login(login: LoginModel) {
@@ -57,6 +68,7 @@ export class UserService {
       )
       .subscribe(token => {
         this.setAuthenticationToken(token)
+        this.setUsernameCookie(login.username)
         this.router.navigate(['/'])
       })
 
@@ -72,13 +84,15 @@ export class UserService {
       )
       .subscribe(token => {
           this.setAuthenticationToken(token)
+          this.setUsernameCookie(register.username)
           this.router.navigate(['/'])
         }
       )
   }
 
   public isUserLoggedIn(): Boolean {
-    return this.cookieService.check(this.authenticationTokenCookieName);//check if token expired
+    return true;
+    // return this.cookieService.check(this.authenticationTokenCookieName);//check if token expired
   }
 
   public logout(): void {

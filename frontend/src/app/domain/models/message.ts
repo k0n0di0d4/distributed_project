@@ -1,8 +1,6 @@
 export interface Message {
   id: number,
-  senderId: string,
-  date: string,
-  content: string,
-  read: boolean,
-  conversationId: string
+  text: string,
+  sender: string,
+  messageType: string
 }

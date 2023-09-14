@@ -172,3 +172,18 @@
     }
   }
 }
+
+.logout{
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 100px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: #CDB4DB;
+  transition-duration: 0.3s;
+  border: none;
+  &:hover{
+    background-color: pink;
+  }
+}

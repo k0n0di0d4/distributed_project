@@ -5,8 +5,10 @@
         <li class="messageConverser" *ngFor="let message of messages">
           <img src="/assets/images/user.png" alt="img" class="userImg">
           <span>{{message.sender}}: </span>
-          <span>{{message.text}}</span>
-                    <img src="/assets/images/delete.png" alt="img" class="deleteMsg" (click)="deleteMsg(message.id)">
+          <span [ngClass]="{'messageDeletedSpan': message.text === 'Message deleted...'}">
+            {{message.text}}
+          </span>
+                    <img [ngClass]="{'messageDeletedImg': message.text === 'Message deleted...'}" src="/assets/images/delete.png" alt="img" class="deleteMsg" (click)="deleteMsg(message.id)">
         </li>
       </ul>
     </section>

@@ -57,7 +57,7 @@ export class MainComponent implements OnInit {
         let found = this.messages.find((message) => message.id === data.id);
 
         if(found){
-          found.text = "MESSAGE DELETED"
+          found.text = "Message deleted..."
           found.messageType = ""
         }
         console.log(found)

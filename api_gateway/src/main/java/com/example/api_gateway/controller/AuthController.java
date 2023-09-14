@@ -36,7 +36,6 @@ public class AuthController {
         return ResponseEntity.ok("User successfully registered");
     }*/
 
-    @CrossOrigin("http://localhost:8080")
     @PostMapping("/user/register")
     public ResponseEntity<String> register(@RequestBody AuthRequest authRequest) {
         AuthEntity authEntity = new AuthEntity("register", authRequest.getUsername(), authRequest.getPassword());

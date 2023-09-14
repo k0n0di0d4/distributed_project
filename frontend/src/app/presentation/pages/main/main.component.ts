@@ -15,25 +15,36 @@ export class MainComponent implements OnInit {
 
   messages: Message[] = [];
 
+  current_id: number = 1;
+
   constructor(private userService: UserService,
               private messageService: MessageService,
               private webSocketService: WebsocketService) {
   }
 
   ngOnInit(): void {
-    this.webSocketService.connectToWebSocket()
+    this.webSocketService.connectToWebSocket().subscribe((message: Message) => {
+      this.messages.push(message);
+    });
   }
 
   sendMsg() {
     console.log(this.writtenMsg)
+    let message: Message = {
+      id: this.current_id,
+      text: this.writtenMsg,
+      sender: this.userService.getUsernameCookie(),
+      messageType: "CHAT"
+    }
+
     this.messageService.send(
-      {
-        id: 0,
-        text: this.writtenMsg,
-        sender: this.userService.getUsernameCookie(),
-        messageType: "CHAT"
-      }
+      message
     )
+
+    //this.messages.push(message)
+    console.log(message)
+
+    this.current_id++
     this.writtenMsg = ''
   }
 

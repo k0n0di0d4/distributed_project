@@ -17,6 +17,7 @@ export class WebsocketService {
     this.onMessage().subscribe((message) => {
       console.log(message)
     })
+    return this.onMessage()
   }
 
   // Methods to send WebSocket messages

@@ -28,7 +28,7 @@ public class MessageController {
 
     //TODO: FIX REQUEST
     @MessageMapping("/sendMessage")
-    @SendTo("/topic/public") // TODO: CHANGE IT TO SOMETHING ELSE
+    @SendTo("/topic/public")
     public MessageRequest sendMessage(@RequestBody MessageRequest messageRequest) {
         MessageRequest message = new MessageRequest(messageRequest.getId(), messageRequest.getText(), messageRequest.getSender(), "CHAT");
         messageService.sendMessage(message);

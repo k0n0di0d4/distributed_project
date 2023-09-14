@@ -53,7 +53,15 @@ export class MainComponent implements OnInit {
       this.stompClient.subscribe("/topic/delete" ,test=>{
         let message_data = JSON.parse(test.body)
         const data: Message = {id: message_data.id,text:message_data.text,sender:message_data.sender,messageType: message_data.messageType}
-        this.messages = this.messages.filter((test)=>test.id!= data.id);
+        //this.messages = this.messages.filter((test)=>test.id!= data.id);
+        let found = this.messages.find((message) => message.id === data.id);
+
+        if(found){
+          found.text = "MESSAGE DELETED"
+          found.messageType = ""
+        }
+        console.log(found)
+
       })
     };
   }

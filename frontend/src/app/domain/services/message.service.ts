@@ -34,7 +34,7 @@ export class MessageService implements OnInit {
     //   .pipe(
     //     catchError(this.globalErrorHandler.handleError)
     //   )
-    this.websocketService.send({ content: message })
+    // this.websocketService.send({ content: message })
   }
 
   public edit(message: Message) {

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
+import {Message} from "../models/message";
 
 const WEBSOCKET_URL = 'ws://localhost:8080/ChatApi';
 
@@ -14,14 +15,14 @@ export class WebsocketService {
   }
 
   public connectToWebSocket() {
-    this.onMessage().subscribe((message) => {
-      console.log(message)
-    })
+    // this.onMessage().subscribe((message) => {
+    //   console.log(message)
+    // })
     return this.onMessage()
   }
 
   // Methods to send WebSocket messages
-  send(message: any) {
+  send(message: Message) {
     this.socket$.next(message);
   }
 

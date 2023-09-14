@@ -1,8 +1,13 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { Message } from 'src/app/domain/models/message';
-import { MessageService } from 'src/app/domain/services/message.service';
-import { UserService } from 'src/app/domain/services/user.service';
-import { WebsocketService } from 'src/app/domain/services/web-socket.service';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {Message} from 'src/app/domain/models/message';
+import {MessageService} from 'src/app/domain/services/message.service';
+import {UserService} from 'src/app/domain/services/user.service';
+import {WebsocketService} from 'src/app/domain/services/web-socket.service';
+import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
+import {Stomp} from "@stomp/stompjs";
+import * as SockJS from 'sockjs-client';
+
+const WEBSOCKET_URL = 'ws://localhost:8080/ChatApi';
 
 @Component({
   selector: 'app-main',
@@ -12,20 +17,22 @@ import { WebsocketService } from 'src/app/domain/services/web-socket.service';
 export class MainComponent implements OnInit {
 
   writtenMsg: string = ''
+  // private socket$: WebSocketSubject<any>;
 
   messages: Message[] = [];
+
+  public stompClient: Stomp.Client;
+  public msg: string[] = [];
 
   current_id: number = 1;
 
   constructor(private userService: UserService,
-              private messageService: MessageService,
-              private webSocketService: WebsocketService) {
+              private messageService: MessageService) {
+    this.initializeWebSocketConnection();
   }
 
   ngOnInit(): void {
-    this.webSocketService.connectToWebSocket().subscribe((message: Message) => {
-      this.messages.push(message);
-    });
+
   }
 
   sendMsg() {
@@ -37,7 +44,7 @@ export class MainComponent implements OnInit {
       messageType: "CHAT"
     }
 
-    this.messageService.send(
+    this.sendMessage(
       message
     )
 
@@ -49,7 +56,7 @@ export class MainComponent implements OnInit {
   }
 
   deleteMsg(msgId: number) {
-    this.messageService.send(
+    this.sendMessage(
       {
         id: msgId,
         text: "",
@@ -62,4 +69,24 @@ export class MainComponent implements OnInit {
   logout(): void {
     this.userService.logout()
   }
+
+  initializeWebSocketConnection() {
+    const serverUrl = WEBSOCKET_URL;
+    const ws = new SockJS(serverUrl);
+    this.stompClient = Stomp.over(ws);
+    const that = this;
+
+    this.stompClient.connect({}, function (frame:any) {
+      that.stompClient.subscribe('/api/destination/greetings', (message:any) => {
+        if (message.body) {
+          that.msg.push(message.body);
+        }
+      });
+    });
+  }
+
+  sendMessage(message: Message) {
+    this.stompClient.send('/api/sendMessage', {}, message);
+  }
+
 }

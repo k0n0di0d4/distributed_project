@@ -8,7 +8,7 @@ import { MainComponent } from './presentation/pages/main/main.component';
 import { ErrorComponent } from './presentation/pages/error/error.component';
 import { LoginFormComponent } from './presentation/pages/login/login-form/login-form.component';
 import { RegisterFormComponent } from './presentation/pages/login/register-form/register-form.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
@@ -24,8 +24,7 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule,
-    FormsModule
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -22,12 +22,16 @@ export class LoginFormComponent implements OnInit {
   }
 
   submitLogin() {
-    this.userService.login(
-      {
-        username: this.loginForm.get('username')?.value,
-        password: this.loginForm.get('password')?.value
-      }
-    )
+    const username = this.loginForm.get('username')?.value as string ?? '';
+    const password = this.loginForm.get('password')?.value as string ?? '';
+
+    this.userService.login({ username, password });
+    // this.userService.login(
+    //   {
+    //     username: this.loginForm.get('username')?.value as string,
+    //     password: this.loginForm.get('password')?.value as string
+    //   }
+    // )
     this.loginForm.reset()
   }
 

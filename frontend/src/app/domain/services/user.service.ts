@@ -35,7 +35,9 @@ export class UserService {
   }
 
   public setUsernameCookie(login: string) {
-    this.cookieService.set(this.usernameCookie, login);
+    if (login !== null && login !== undefined) {
+      this.cookieService.set(this.usernameCookie, login);
+    }
   }
 
   public getAccessToken(): string {
@@ -68,7 +70,7 @@ export class UserService {
       )
       .subscribe(token => {
         this.setAuthenticationToken(token)
-        this.setUsernameCookie(login.username)
+        this.setUsernameCookie(login.username ?? ''); // Ustaw pusty string, jeśli login.username jest null lub undefined
         this.router.navigate(['/'])
       })
 
@@ -89,7 +91,7 @@ export class UserService {
       )
       .subscribe(token => {
           this.setAuthenticationToken(token)
-          this.setUsernameCookie(register.username)
+        this.setUsernameCookie(register.username ?? ''); // Ustaw pusty string, jeśli login.username jest null lub undefined
           this.router.navigate(['/'])
         }
       )

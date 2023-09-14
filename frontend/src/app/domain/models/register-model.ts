@@ -1,4 +1,4 @@
 export interface RegisterModel {
-    username: string,
-    password: string
+  username: string | null | undefined;
+  password: string | null | undefined;
 }

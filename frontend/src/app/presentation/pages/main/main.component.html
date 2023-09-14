@@ -2,16 +2,17 @@
   <main class="chat">
     <section class="messages">
       <ul>
-        <li class="messageConverser">
+        <li class="messageConverser" *ngFor="let message of messages">
           <img src="/assets/images/user.png" alt="img" class="userImg">
-          <span>Rob: </span>
-          <span>i need more bullets</span>
-          <img src="/assets/images/delete.png" alt="img" class="deleteMsg">
+          <span>{{message.sender}} :</span>
+          <span>{{message.text}}</span>
+          <img src="/assets/images/delete.png" alt="img" class="deleteMsg" (click)="deleteMsg(message.id)">
         </li>
       </ul>
     </section>
     <section class="sendMessage">
-            <textarea [(ngModel)]="writtenMsg" name="" id="" cols="30" rows="10" maxlength="4000" autofocus placeholder="Type something..."
+            <textarea [(ngModel)]="writtenMsg" name="" id="" cols="30" rows="10" maxlength="4000" autofocus
+                      placeholder="Type something..."
                       required></textarea>
       <form class="sendImgBtn" action="">
         <label for="myFile" class="custom-file-upload">

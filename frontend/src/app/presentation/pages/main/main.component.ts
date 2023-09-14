@@ -1,7 +1,8 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { MessageService } from 'src/app/domain/services/message.service';
-import { UserService } from 'src/app/domain/services/user.service';
-import { WebsocketService } from 'src/app/domain/services/web-socket.service';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {MessageService} from 'src/app/domain/services/message.service';
+import {UserService} from 'src/app/domain/services/user.service';
+import {WebsocketService} from 'src/app/domain/services/web-socket.service';
+import {Message} from "../../../domain/models/message";
 
 @Component({
   selector: 'app-main',
@@ -12,6 +13,8 @@ export class MainComponent implements OnInit {
 
   writtenMsg: string = ''
 
+  messages: Message[] = []
+
   constructor(private userService: UserService,
               private messageService: MessageService,
               private webSocketService: WebsocketService) {
@@ -19,6 +22,10 @@ export class MainComponent implements OnInit {
 
   ngOnInit(): void {
     this.webSocketService.connectToWebSocket()
+
+    this.webSocketService.onMessage().subscribe((message) => {
+      this.messages.push(message); // Dodaj wiadomość do kolekcji
+    });
   }
 
   sendMsg() {
@@ -34,8 +41,15 @@ export class MainComponent implements OnInit {
     this.writtenMsg = ''
   }
 
-  deleteMsg() {
-
+  deleteMsg(msgId: number) {
+    this.messageService.send(
+      {
+        id: msgId,
+        text: "DELETE",
+        sender: "DELETE",
+        messageType: "DELETE"
+      }
+    )
   }
 
   logout(): void {

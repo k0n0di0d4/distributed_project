@@ -91,8 +91,7 @@ export class UserService {
   }
 
   public isUserLoggedIn(): Boolean {
-    return true;
-    // return this.cookieService.check(this.authenticationTokenCookieName);//check if token expired
+    return this.cookieService.check(this.authenticationTokenCookieName);//check if token expired
   }
 
   public logout(): void {

@@ -28,7 +28,7 @@ public class MessageController {
 
     //TODO: FIX REQUEST
     @MessageMapping("/sendMessage")
-    @SendTo("/destination/greetings")
+    @SendTo("/destination/greetings") // TODO: CHANGE IT TO SOMETHING ELSE
     public MessageRequest sendMessage(@RequestBody MessageRequest messageRequest) {
         MessageRequest message = new MessageRequest(messageRequest.getId(), messageRequest.getText(), messageRequest.getSender(), "CHAT");
         messageService.sendMessage(message);

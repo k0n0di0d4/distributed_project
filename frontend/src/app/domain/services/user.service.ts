@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { catchError } from 'rxjs';
-import { ApiPaths } from 'src/environments/ApiPaths';
-import { environment } from 'src/environments/environment';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { User } from '../models/user';
-import { RegisterModel } from '../models/register-model';
-import { LoginModel } from '../models/login-model';
-import { CookieService } from 'ngx-cookie-service';
-import { TokenModel } from '../models/token-model';
-import { GlobalErrorHandlerService } from './global-error-handler.service';
-import { MessageService } from './message.service';
-import { WebsocketService } from './web-socket.service';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {catchError} from 'rxjs';
+import {ApiPaths} from 'src/environments/ApiPaths';
+import {environment} from 'src/environments/environment';
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse} from '@angular/common/http';
+import {User} from '../models/user';
+import {RegisterModel} from '../models/register-model';
+import {LoginModel} from '../models/login-model';
+import {CookieService} from 'ngx-cookie-service';
+import {TokenModel} from '../models/token-model';
+import {GlobalErrorHandlerService} from './global-error-handler.service';
+import {MessageService} from './message.service';
+import {WebsocketService} from './web-socket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -30,8 +30,8 @@ export class UserService {
 
   }
 
-  public setAuthenticationToken(tokenModel: TokenModel) {
-    this.cookieService.set(this.authenticationTokenCookieName, tokenModel.authToken);
+  public setAuthenticationToken(token: string) {
+    this.cookieService.set(this.authenticationTokenCookieName, token);
   }
 
   public setUsernameCookie(login: string) {
@@ -62,14 +62,16 @@ export class UserService {
 
   public login(login: LoginModel) {
     const endpoint = this.url + '/auth/user/login';
-    const headers = { 'accept': 'application/json', 'Content-Type': 'application/json' };
+    const headers = {'accept': 'application/json', 'Content-Type': 'application/json'};
+    let newToken;
 
-    return this.httpClient.post<TokenModel>(endpoint, login, { headers: headers })
+    return this.httpClient.post<TokenModel>(endpoint, login, {headers: headers, responseType: 'text' as 'json'})
       .pipe(
         catchError(this.globalErrorHandler.handleError)
       )
       .subscribe(token => {
-        this.setAuthenticationToken(token)
+        newToken = String(token);
+        this.setAuthenticationToken(newToken)
         this.setUsernameCookie(login.username ?? ''); // Ustaw pusty string, jeśli login.username jest null lub undefined
         this.router.navigate(['/'])
       })
@@ -78,20 +80,26 @@ export class UserService {
 
   public signup(register: RegisterModel): void {
     const endpoint = this.url + '/auth/user/register';
-    const headers = { 'accept': 'application/json', 'Content-Type': 'application/json' };
-    const corsHeaders = new HttpHeaders({
+    let newToken;
+    const headers = {
+      'accept': 'application/json',
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Access-Control-Allow-Origin': 'http://localhost:19727'
-    });
+    };
+    // const corsHeaders = new HttpHeaders({
+    //   'Content-Type': 'application/json',
+    //   'Accept': 'application/json',
+    //   'Access-Control-Allow-Origin': 'http://localhost:19727'
+    // });
     console.log(endpoint)
-    this.httpClient.post<TokenModel>(endpoint, register, { headers: corsHeaders })
+    this.httpClient.post<TokenModel>(endpoint, register, {headers: headers, responseType: 'text' as 'json'})
       .pipe(
         catchError(this.globalErrorHandler.handleError)
       )
       .subscribe(token => {
-          this.setAuthenticationToken(token)
-        this.setUsernameCookie(register.username ?? ''); // Ustaw pusty string, jeśli login.username jest null lub undefined
+          newToken = String(token);
+          this.setAuthenticationToken(newToken)
+          console.log(token)
+          this.setUsernameCookie(register.username ?? ''); // Ustaw pusty string, jeśli login.username jest null lub undefined
           this.router.navigate(['/'])
         }
       )
@@ -109,9 +117,9 @@ export class UserService {
   }
 
   public getUserRole(): string {
-    const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${this.getAccessToken()}` };
+    const headers = {'Content-Type': 'application/json', 'Authorization': `Bearer ${this.getAccessToken()}`};
     let userRole = '';
-    this.httpClient.get<User>(this.url + '/GetLogged', { headers: headers })
+    this.httpClient.get<User>(this.url + '/GetLogged', {headers: headers})
       .pipe(
         catchError(this.globalErrorHandler.handleError)
       )
@@ -120,26 +128,34 @@ export class UserService {
   }
 
   public getLoggedUser() {
-    const headers = { 'accept': 'text/plain', 'Authorization': `Bearer ${this.getAccessToken()}` };
-    return this.httpClient.get<User>(this.url + '/GetLogged', { headers: headers })
+    const headers = {'accept': 'text/plain', 'Authorization': `Bearer ${this.getAccessToken()}`};
+    return this.httpClient.get<User>(this.url + '/GetLogged', {headers: headers})
       .pipe(
         catchError(this.globalErrorHandler.handleError)
       )
   }
 
   public changePassword(oldPassword: string, newPassword: string) {
-    const headers = { 'accept': '*/*', 'Authorization': `Bearer ${this.getAccessToken()}`, 'Content-Type': 'application/json' };
+    const headers = {
+      'accept': '*/*',
+      'Authorization': `Bearer ${this.getAccessToken()}`,
+      'Content-Type': 'application/json'
+    };
     const endpoint = this.url + '/ChangePassword'
-    return this.httpClient.post(endpoint, { oldPassword: oldPassword, newPassword: newPassword }, { headers: headers })
+    return this.httpClient.post(endpoint, {oldPassword: oldPassword, newPassword: newPassword}, {headers: headers})
       .pipe(
         catchError(this.globalErrorHandler.handleError)
       )
   }
 
   public updateUser(user: any) {
-    const headers = { 'accept': '*/*', 'Authorization': `Bearer ${this.getAccessToken()}`, 'Content-Type': 'application/json' };
+    const headers = {
+      'accept': '*/*',
+      'Authorization': `Bearer ${this.getAccessToken()}`,
+      'Content-Type': 'application/json'
+    };
     const endpoint = this.url + '/UpdateUser'
-    return this.httpClient.post(endpoint, user, { headers: headers }).pipe(
+    return this.httpClient.post(endpoint, user, {headers: headers}).pipe(
       catchError(this.globalErrorHandler.handleError)
     )
   }

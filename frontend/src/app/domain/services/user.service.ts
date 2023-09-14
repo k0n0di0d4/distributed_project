@@ -77,8 +77,13 @@ export class UserService {
   public signup(register: RegisterModel): void {
     const endpoint = this.url + '/auth/user/register';
     const headers = { 'accept': 'application/json', 'Content-Type': 'application/json' };
-
-    this.httpClient.post<TokenModel>(endpoint, register, { headers: headers })
+    const corsHeaders = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Access-Control-Allow-Origin': 'http://localhost:19727'
+    });
+    console.log(endpoint)
+    this.httpClient.post<TokenModel>(endpoint, register, { headers: corsHeaders })
       .pipe(
         catchError(this.globalErrorHandler.handleError)
       )
@@ -91,8 +96,7 @@ export class UserService {
   }
 
   public isUserLoggedIn(): Boolean {
-    return true;
-    // return this.cookieService.check(this.authenticationTokenCookieName);//check if token expired
+    return this.cookieService.check(this.authenticationTokenCookieName);//check if token expired
   }
 
   public logout(): void {

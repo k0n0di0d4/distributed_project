@@ -1,73 +1,27 @@
 <div class="main">
-    <nav class="navbar">
-        <section class="search">
-            <div>
-                <img src="/assets/images/search1.png" alt="">
-                <input type="text" placeholder="Find chat">
-            </div>
-        </section>
-        <section class="conversations">
-            <ul id="chatList">
-                <li class="chatItem">
-                    <img src="/assets/images/smerf.jpg" alt="">
-                    <div>
-                        <span>Sender</span>
-                        <span>message2</span>
-                    </div>
-                </li>
-                <li class="chatItem">
-                    <img src="" alt="">
-                    <div>
-                        <span>Sender</span>
-                        <span>Message</span>
-                    </div>
-                </li>
-            </ul>
-
-        </section>
-        <section class="userProfile">
-            <div class="userInfo">
-                <img src="/assets/images/donpedro.jpg" alt="">
-                <span>Tajemniczy Don Pedro</span>
-            </div>
-            <div class="logout" (click)="logout()">
-                <img src="/assets/images/logout.png" alt="">
-            </div>
-        </section>
-    </nav>
-    <main class="chat">
-        <section class="converser">
-            <div>
-                <img src="/assets/images/smerf.jpg" alt="">
-                <span>Sender</span>
-            </div>
-        </section>
-        <section class="messages">
-            <ul>
-                <li class="messageConverser">
-                    messagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessage
-                </li>
-                <li class="messageUser">
-                    messagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessage
-                </li>
-                <li class="messageUser">
-                    messagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessage
-                </li>
-                <li class="messageUser">
-                    messagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessage
-                </li>
-                <li class="messageConverser">
-                    messagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessage
-                </li>
-                <li class="messageConverser">
-                    messagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessagemessage
-                </li>
-            </ul>
-        </section>
-        <section class="sendMessage">
-            <textarea name="" id="" cols="30" rows="10" maxlength="4000" autofocus placeholder="Write message here"
-                required></textarea>
-            <button class="send">Send</button>
-        </section>
-    </main>
+  <main class="chat">
+    <section class="messages">
+      <ul>
+        <li class="messageConverser" *ngFor="let message of messages">
+          <img src="/assets/images/user.png" alt="img" class="userImg">
+          <span>{{message.sender}}: </span>
+          <span>{{message.text}}/span>
+                    <img src="/assets/images/delete.png" alt="img" class="deleteMsg" (click)="deleteMsg(message.id)">
+        </li>
+      </ul>
+    </section>
+    <section class="sendMessage">
+            <textarea [(ngModel)]="writtenMsg" name="" id="" cols="30" rows="10" maxlength="4000" autofocus placeholder="Type something..."
+                      required></textarea>
+      <form class="sendImgBtn" action="">
+        <label for="myFile" class="custom-file-upload">
+          <img src="/assets/images/image.png" alt="Img">
+        </label>
+        <input type="file" id="myFile" name="filename" style="display:none;">
+      </form>
+      <button class="send" (click)="sendMsg()">
+        <img src="/assets/images/send.png" alt="Send">
+      </button>
+    </section>
+  </main>
 </div>

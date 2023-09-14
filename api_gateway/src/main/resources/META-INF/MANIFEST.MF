@@ -1,3 +1,5 @@
 Manifest-Version: 1.0
 Main-Class: com.example.api_gateway.ApiGatewayApplication
+Build-Jdk: 20.0.2
+
 

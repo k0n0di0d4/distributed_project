@@ -4,10 +4,12 @@ import {MessageService} from 'src/app/domain/services/message.service';
 import {UserService} from 'src/app/domain/services/user.service';
 import {WebsocketService} from 'src/app/domain/services/web-socket.service';
 import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
-import {Stomp} from "@stomp/stompjs";
-import * as SockJS from 'sockjs-client';
+import {Client, IMessage, StompSubscription} from '@stomp/stompjs';
+import {stringify} from "@angular/compiler/src/util";
 
-const WEBSOCKET_URL = 'ws://localhost:8080/ChatApi';
+
+const WEBSOCKET_URL = 'ws://localhost:8081/ChatApi';
+
 
 @Component({
   selector: 'app-main',
@@ -19,21 +21,47 @@ export class MainComponent implements OnInit {
   writtenMsg: string = ''
   // private socket$: WebSocketSubject<any>;
 
-  messages: Message[] = [];
+  messages: Message[] = []
 
-  public stompClient: Stomp.Client;
+  private stompClient: Client;
   public msg: string[] = [];
 
-  current_id: number = 1;
+  current_id: number = Math.random();
 
   constructor(private userService: UserService,
               private messageService: MessageService) {
-    this.initializeWebSocketConnection();
+    //this.initializeWebSocketConnection();
+
+    this.stompClient = new Client(
+      {brokerURL:WEBSOCKET_URL}
+    )
+    this.stompClient.activate();
+
+    if(this.stompClient.connected){
+      console.log("Hey! Connected");
+    }
+
+
+
+    this.stompClient.onConnect = (frame) => {
+      this.stompClient.subscribe("/topic/public" ,test=>{
+        let message_data = JSON.parse(test.body)
+        const data: Message = {id: message_data.id,text:message_data.text,sender:message_data.sender,messageType: message_data.messageType}
+        this.messages.push(data)
+      })
+
+      this.stompClient.subscribe("/topic/delete" ,test=>{
+        let message_data = JSON.parse(test.body)
+        const data: Message = {id: message_data.id,text:message_data.text,sender:message_data.sender,messageType: message_data.messageType}
+        this.messages = this.messages.filter((test)=>test.id!= data.id);
+      })
+    };
   }
 
   ngOnInit(): void {
 
   }
+
 
   sendMsg() {
     console.log(this.writtenMsg)
@@ -48,7 +76,6 @@ export class MainComponent implements OnInit {
       message
     )
 
-    //this.messages.push(message)
     console.log(message)
 
     this.current_id++
@@ -56,37 +83,16 @@ export class MainComponent implements OnInit {
   }
 
   deleteMsg(msgId: number) {
-    this.sendMessage(
-      {
-        id: msgId,
-        text: "",
-        sender: "",
-        messageType: "DELETE"
-      }
-    )
+    let data: Message = {id: msgId, text:"", sender:"", messageType:"DELETE"}
+
+    this.stompClient.publish({destination: '/api/deleteMessage', body: JSON.stringify(data)});
   }
 
   logout(): void {
     this.userService.logout()
   }
 
-  initializeWebSocketConnection() {
-    const serverUrl = WEBSOCKET_URL;
-    const ws = new SockJS(serverUrl);
-    this.stompClient = Stomp.over(ws);
-    const that = this;
-
-    this.stompClient.connect({}, function (frame:any) {
-      that.stompClient.subscribe('/api/destination/greetings', (message:any) => {
-        if (message.body) {
-          that.msg.push(message.body);
-        }
-      });
-    });
-  }
-
   sendMessage(message: Message) {
-    this.stompClient.send('/api/sendMessage', {}, message);
+    this.stompClient.publish({destination: '/api/sendMessage', body: JSON.stringify(message)});
   }
-
 }

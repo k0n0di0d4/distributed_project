@@ -16,7 +16,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
         // carry messages to the clients prefixed with /destination
         // this will be used to subscribe to
-        config.enableSimpleBroker("/destination");
+        config.enableSimpleBroker("/topic");
 
         // designate the /app prefix for methods annotated with @MessageMapping
         config.setApplicationDestinationPrefixes("/api");

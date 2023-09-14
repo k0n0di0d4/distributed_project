@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/destination")
+@Controller
 public class MessageController {
     @Value("${rabbitmq.messageExchange.name}")
     private String exchange;
@@ -28,7 +28,7 @@ public class MessageController {
 
     //TODO: FIX REQUEST
     @MessageMapping("/sendMessage")
-    @SendTo("/destination/greetings") // TODO: CHANGE IT TO SOMETHING ELSE
+    @SendTo("/topic/public") // TODO: CHANGE IT TO SOMETHING ELSE
     public MessageRequest sendMessage(@RequestBody MessageRequest messageRequest) {
         MessageRequest message = new MessageRequest(messageRequest.getId(), messageRequest.getText(), messageRequest.getSender(), "CHAT");
         messageService.sendMessage(message);
@@ -37,11 +37,11 @@ public class MessageController {
 
     //TODO: FIX REQUEST
     @MessageMapping("/deleteMessage")
-    @SendTo("/destination/delete")
-    public ResponseEntity<String> deleteMessage(@RequestBody MessageRequest messageRequest) {
+    @SendTo("/topic/delete")
+    public MessageRequest deleteMessage(@RequestBody MessageRequest messageRequest) {
         MessageRequest message = new MessageRequest(messageRequest.getId(), messageRequest.getText(), messageRequest.getSender(), "DELETE");
         messageService.sendMessage(message);
-        return ResponseEntity.ok("Message deleted");
+        return message;
     }
 
 }

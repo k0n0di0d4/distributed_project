@@ -1,18 +1,13 @@
-FROM node:14 as build
+FROM --platform=$BUILDPLATFORM node:17.0.1-bullseye-slim as builder
 
-WORKDIR /app
+RUN mkdir /project
+WORKDIR /project
 
-COPY package.json package-lock.json /app/
-RUN npm install
+RUN npm install -g @angular/cli@14
 
-COPY . /app/
+COPY package.json package-lock.json ./
+RUN npm ci
 
-RUN npm run build
+COPY . .
 
-FROM nginx:latest
-
-COPY --from=build /app/dist/ /usr/share/nginx/html
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["ng", "serve", "--host", "0.0.0.0"]

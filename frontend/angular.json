@@ -75,7 +75,8 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "chat-app:build:production"
+              "browserTarget": "chat-app:build:production",
+              "port": 19727
             },
             "development": {
               "browserTarget": "chat-app:build:development",

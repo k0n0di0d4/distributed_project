@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import {Message} from "../models/message";
 
-const WEBSOCKET_URL = 'ws://localhost:8080/ChatApi';
+const WEBSOCKET_URL = 'ws://localhost:19726/ChatApi';
 
 @Injectable({
   providedIn: 'root',

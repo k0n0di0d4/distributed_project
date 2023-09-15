@@ -8,7 +8,7 @@ import {Client, IMessage, StompSubscription} from '@stomp/stompjs';
 import {stringify} from "@angular/compiler/src/util";
 
 
-const WEBSOCKET_URL = 'ws://localhost:8081/ChatApi';
+const WEBSOCKET_URL = 'ws://localhost:19726/ChatApi';
 
 
 @Component({

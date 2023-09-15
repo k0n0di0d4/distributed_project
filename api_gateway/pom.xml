@@ -10,7 +10,6 @@
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>api_gateway</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>api_gateway</name>
 	<description>api_gateway</description>
 

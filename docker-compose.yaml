@@ -73,7 +73,7 @@ services:
     networks:
       - HPDS_180429
     ports:
-      - '19727:80'
+      - '19727:19727'
 networks:
   HPDS_180429:
     driver: overlay

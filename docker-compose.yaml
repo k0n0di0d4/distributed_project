@@ -12,7 +12,9 @@ services:
 
   api_gateway:
     image: dynio/hpds_180429_api_gateway:latest
-    build: api_gateway
+    build:
+      context: ./api_gateway
+      dockerfile: Dockerfile
     depends_on:
       - rabbitmq
     networks:
@@ -27,7 +29,9 @@ services:
 
   authentication_service:
     image: dynio/hpds_180429_authentication_service:latest
-    build: authentication_service
+    build:
+      context: ./authentication_service
+      dockerfile: Dockerfile
     depends_on:
       - rabbitmq
       - api_gateway
@@ -43,7 +47,9 @@ services:
       - DATABASEPASSWORD = student
   message_service:
     image: dynio/hpds_180429_message_service:latest
-    build: authentication_service
+    build:
+      context: ./message_service
+      dockerfile: Dockerfile
     depends_on:
       - rabbitmq
       - api_gateway
@@ -60,7 +66,10 @@ services:
 
   frontend:
     image: dynio/hpds_180429_frontend:latest
-    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
     networks:
       - HPDS_180429
     ports:

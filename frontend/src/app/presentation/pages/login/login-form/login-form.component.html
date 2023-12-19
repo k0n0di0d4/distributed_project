@@ -1,0 +1,22 @@
+<form class="form" action="#" method="post" (ngSubmit)="submitLogin()" autocomplete="on" [formGroup]="loginForm">
+    <div class="form__container">
+        <div class="input__container">
+            <img src="/assets/images/email.png" alt="">
+            <input class="input" type="text" autofocus placeholder="Username"
+                formControlName="username">
+        </div>
+        <div class="input__error">
+            <span *ngIf="username?.invalid && (username?.dirty || username?.touched)">Invalid username</span>
+        </div>
+        <div class="input__container">
+            <img src="/assets/images/padlock.png" alt="">
+            <input class="input" type="password" autofocus placeholder="Password" formControlName="password">
+        </div>
+        <div class="input__error">
+            <span *ngIf="password?.invalid && (password?.dirty || password?.touched)">Invalid password</span>
+        </div>
+        <div class="loginButton__container">
+            <button class="loginButton" type="submit" [disabled]="!loginForm.valid">Log In</button>
+        </div>
+    </div>
+</form>

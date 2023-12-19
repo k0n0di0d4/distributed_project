@@ -1,0 +1,70 @@
+version: '3'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.11.16-management
+    hostname: rabbitmq
+    restart: always
+    ports:
+      - '18042:15672'
+    networks:
+      - HPDS_180429
+
+  api_gateway:
+    image: dynio/hpds_180429_api_gateway:latest
+    build: api_gateway
+    depends_on:
+      - rabbitmq
+    networks:
+      - HPDS_180429
+    ports:
+      - '19726:8090'
+    environment:
+      - RABBITMQHOST = rabbitmq
+      - RABBITMQPORT = 5672
+      - RABBITMQUSER = guest
+      - RABBITMQPASSWORD = guest
+
+  authentication_service:
+    image: dynio/hpds_180429_authentication_service:latest
+    build: authentication_service
+    depends_on:
+      - rabbitmq
+      - api_gateway
+    networks:
+      - HPDS_180429
+    environment:
+      - RABBITMQHOST = rabbitmq
+      - RABBITMQPORT = 5672
+      - RABBITMQUSER = guest
+      - RABBITMQPASSWORD = guest
+      - DATABASEURL = jdbc:postgresql://student-swarm01.maas:5432/HPDS_18042
+      - DATABASEUSER = postgres
+      - DATABASEPASSWORD = student
+  message_service:
+    image: dynio/hpds_180429_message_service:latest
+    build: authentication_service
+    depends_on:
+      - rabbitmq
+      - api_gateway
+    networks:
+      - HPDS_180429
+    environment:
+      - RABBITMQHOST = rabbitmq
+      - RABBITMQPORT = 5672
+      - RABBITMQUSER = guest
+      - RABBITMQPASSWORD = guest
+      - DATABASEURL = jdbc:postgresql://student-swarm01.maas:5432/HPDS_18042
+      - DATABASEUSER = postgres
+      - DATABASEPASSWORD = student
+
+  frontend:
+    image: dynio/hpds_180429_frontend:latest
+    container_name: frontend
+    networks:
+      - HPDS_180429
+    ports:
+      - '19727:8100'
+networks:
+  HPDS_180429:
+    driver: overlay

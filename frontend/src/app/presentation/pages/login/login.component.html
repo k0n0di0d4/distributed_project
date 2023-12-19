@@ -1,0 +1,20 @@
+<main class="container">
+    <section class="switch">
+        <div class="switch-button" (click)="changeForm()">
+            <input class="switch-button-checkbox" type="checkbox"/>
+            <label class="switch-button-label" for=""><span class="switch-button-label-span">Log in</span></label>
+        </div>
+    </section>
+    <section class="form">
+        <div class="form__container">
+            <div class="form__object">
+                <app-login-form class="loginForm" [class.loginForm__changed]="isRegisterFormActive"
+                    (changeForm)="changeForm()">
+                </app-login-form>
+                <app-register-form class="registerForm" [class.registerForm__changed]="isRegisterFormActive"
+                    (changeForm)="changeForm()">
+                </app-register-form>
+            </div>
+        </div>
+    </section>
+</main>
